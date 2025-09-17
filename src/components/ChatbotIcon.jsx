@@ -1,6 +1,6 @@
 import React from "react";
 
-const Chatboticon = () => {
+const ChatbotIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -13,4 +13,4 @@ const Chatboticon = () => {
   );
 };
 
-export default Chatboticon;
+export default ChatbotIcon;
