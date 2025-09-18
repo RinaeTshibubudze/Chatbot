@@ -15,17 +15,21 @@ const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
     ]);
 
     // Add a "thinking..." message from the bot after a short delay
-    setTimeout(
-      () =>
-        setChatHistory((prevHistory) => [
-          ...prevHistory,
-          { role: "model", text: "Thinking..." },
-        ]),
-      600
-    );
+    setTimeout(() => {
+      setChatHistory((prevHistory) => [
+        ...prevHistory,
+        { role: "model", text: "Thinking..." },
+      ]);
+      generateBotResponse([
+        ...chatHistory,
+        {
+          role: "user",
+          text: `Using the details provided above, please address this query: ${userMessage}`,
+        },
+      ]);
+    }, 600);
 
     // Generate bot response
-    generateBotResponse([...chatHistory, { role: "user", text: userMessage }]);
   };
   return (
     <form action="#" className="chat-form" onSubmit={handleFormSubmit}>
