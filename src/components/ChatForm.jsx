@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const ChatForm = ({ setChatHistory }) => {
+const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
   const inputRef = useRef(null);
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +23,9 @@ const ChatForm = ({ setChatHistory }) => {
         ]),
       600
     );
+
+    // Generate bot response
+    generateBotResponse([...chatHistory, { role: "user", text: userMessage }]);
   };
   return (
     <form action="#" className="chat-form" onSubmit={handleFormSubmit}>
