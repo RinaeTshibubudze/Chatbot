@@ -10,10 +10,10 @@ const App = () => {
 
   const generateBotResponse = async (history) => {
     //helper function to update chat history with bot response
-    const updateHistory = (text) => {
+    const updateHistory = (text, isError = false) => {
       setChatHistory((prev) => [
         ...prev.filter((msg) => msg.text !== "Thinking..."),
-        { role: "model", text },
+        { role: "model", text, isError },
       ]);
     };
     // Format history to match Gemini API requirements
@@ -43,7 +43,7 @@ const App = () => {
         .trim();
       updateHistory(apiResponseText);
     } catch (error) {
-      console.log("Error fetching bot response:", error);
+      updateHistory(error.message, true);
     }
   };
 
