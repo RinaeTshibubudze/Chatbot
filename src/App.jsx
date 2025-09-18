@@ -5,8 +5,31 @@ import { useState } from "react";
 
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
-  const generateBotResponse = (history) => {
-    console.log(history);
+  const generateBotResponse = async (history) => {
+    history = history.map(({ role, text }) => ({
+      role,
+      parts: [{ text }],
+    }));
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": import.meta.env.VITE_GEMINI_API_KEY,
+      },
+      body: JSON.stringify({ contents: history }),
+    };
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_API_URL,
+        requestOptions
+      );
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error.message || "Something went wrong!");
+      console.log(data);
+    } catch (error) {
+      console.log("Error fetching bot response:", error);
+    }
   };
   return (
     <div className="container">
