@@ -6,6 +6,14 @@ import { useState } from "react";
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const generateBotResponse = async (history) => {
+    //helper function to update chat history with bot response
+    const updateHistory = (text) => {
+      setChatHistory((prev) => [
+        ...prev.filter((msg) => msg.text !== "Thinking..."),
+        { role: "model", text },
+      ]);
+    };
+    // Format history to match Gemini API requirements
     history = history.map(({ role, text }) => ({
       role,
       parts: [{ text }],
@@ -26,7 +34,11 @@ const App = () => {
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error.message || "Something went wrong!");
-      console.log(data);
+
+      const apiResponseText = data.candidates[0].content.parts[0].text
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+        .trim();
+      updateHistory(apiResponseText);
     } catch (error) {
       console.log("Error fetching bot response:", error);
     }
